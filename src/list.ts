@@ -2,7 +2,7 @@ type Atom = boolean & number & string;
 type Compound = List & [];
 
 export class List {
-  constructor(public first: unknown, public rest: unknown) {}
+  constructor(public first: any, public rest: any) {}
   /*
   get length of list
   eg:

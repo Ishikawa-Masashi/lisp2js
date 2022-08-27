@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { lisp } from '../src';
+import * as lisp from '../src';
 
 describe('lisp2js', () => {
   it('comment', () => {
