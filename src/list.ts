@@ -1,3 +1,6 @@
+type Atom = boolean & number & string;
+type Compound = List & [];
+
 export class List {
   constructor(public first: unknown, public rest: unknown) {}
   /*
@@ -47,8 +50,7 @@ export class List {
       x.reverse() => (3, 2, 1)
    */
   reverse() {
-    let list_reverse;
-    list_reverse = function (l, output) {
+    const list_reverse = (l: List | null, output: List | null): List | null => {
       if (l instanceof List) {
         return list_reverse(l.rest, cons(l.first, output));
       } else if (l === null) {
@@ -241,3 +243,38 @@ export const cons = (a, b) => new List(a, b);
   car: get first element of list
    */
 export const car = (l) => l.first;
+
+/*
+  cdr: get rest elements of list
+   */
+export const cdr = (l) => l.rest;
+
+/*
+  construct list. same as lisp
+  eg:
+      x = list(1, 2, 3, 4)
+   */
+// export function list() {
+//   let a, create_list;
+//   a = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+//   create_list = function (a, i) {
+//     if (i === a.length) {
+//       return null;
+//     } else {
+//       return cons(a[i], create_list(a, i + 1));
+//     }
+//   };
+//   return create_list(a, 0);
+// }
+
+export function list(...args: unknown[]) {
+  const a = 1 <= args.length ? Array.from(args) : [];
+  const create_list = (a: unknown[], i: number): List | null => {
+    if (i === a.length) {
+      return null;
+    } else {
+      return cons(a[i], create_list(a, i + 1));
+    }
+  };
+  return create_list(a, 0);
+}

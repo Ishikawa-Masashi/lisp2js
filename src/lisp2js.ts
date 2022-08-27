@@ -1,4 +1,4 @@
-import { List, cons, car } from './list';
+import { List, cons, car, cdr, list } from './list';
 /*
  *
  *  Simple Lisp to JavaScript compiler
@@ -19,50 +19,8 @@ if (typeof module != 'undefined') {
  * ######################################################
  * ######################################################
  */
-let $List,
-  cdr,
-  list,
+let $List = List,
   slice = [].slice;
-const list_module = (function () {
-  /*
-      Construct List data structure
-   */
-  let car, cdr, list;
-
-  /*
-  cdr: get rest elements of list
-   */
-  cdr = function (l) {
-    return l.rest;
-  };
-
-  /*
-  construct list. same as lisp
-  eg:
-      x = list(1, 2, 3, 4)
-   */
-  list = function () {
-    let a, create_list;
-    a = 1 <= arguments.length ? slice.call(arguments, 0) : [];
-    create_list = function (a, i) {
-      if (i === a.length) {
-        return null;
-      } else {
-        return cons(a[i], create_list(a, i + 1));
-      }
-    };
-    return create_list(a, 0);
-  };
-  return {
-    list: list,
-    List: List,
-    cdr: cdr,
-  };
-})();
-
-$List = list_module.List;
-list = list_module.list;
-cdr = list_module.cdr;
 
 if (typeof module !== 'undefined') {
   module.exports.$List = $List;
@@ -82,7 +40,6 @@ if (typeof module !== 'undefined') {
  * ########################################
  */
 const lisp_module = function () {
-  let lexer, parser, compiler, lisp_compiler;
   const macros = {}; // used to save macro
   let eval_result = '';
   let global_context = null;
@@ -111,10 +68,10 @@ const lisp_module = function () {
   } else {
     window.append = append;
   }
-  lexer = function (input_string) {
-    const output_list = [];
+  const lexer = function (input_string: string) {
+    const output_list: string[] = [];
     let paren_count = 0;
-    const getIndexOfValidStr = function (input_string, end) {
+    const getIndexOfValidStr = function (input_string: string, end: number) {
       while (1) {
         if (
           end === input_string.length ||
@@ -143,7 +100,6 @@ const lisp_module = function () {
     };
     for (let i = 0; i < input_string.length; i++) {
       if (input_string[i] === '(') {
-        var v;
         output_list.push('(');
         paren_count++;
       } else if (input_string[i] === '[') {
@@ -322,7 +278,7 @@ const lisp_module = function () {
     return output_list;
   };
 
-  parser = function (l) {
+  const parser = (l: string) => {
     const parser_get_tag = {
       "'": 'quote',
       '~': 'unquote',
@@ -515,7 +471,7 @@ const lisp_module = function () {
     }
   }
 
-  var macro_match = function (a, b, result) {
+  const macro_match = function (a, b, result) {
     let i = 0;
     while (true) {
       if (i === a.length && i === b.length) {
@@ -559,7 +515,7 @@ const lisp_module = function () {
   };
   const macro_expand = function (clauses, exp) {
     exp = exp.toArray();
-    var formatList = function (l) {
+    const formatList = function (l) {
       // add "" to values.
       if (l === null) {
         return null;
@@ -779,13 +735,13 @@ const lisp_module = function () {
     }
   };
 
-  compiler = function (
+  const compiler = function (
     l,
-    is_last_exp,
-    is_recur,
-    need_return_string,
-    param_or_assignment,
-    current_fn_name
+    is_last_exp?,
+    is_recur?,
+    need_return_string?,
+    param_or_assignment?,
+    current_fn_name?
   ) {
     let i;
     if (l === null) {
@@ -1855,7 +1811,7 @@ const lisp_module = function () {
         print_eval_result$: whether print eval result or not
 
     */
-  lisp_compiler = function (
+  const lisp_compiler = function (
     l,
     need_return,
     eval_$,
