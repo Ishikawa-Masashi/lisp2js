@@ -2101,7 +2101,7 @@ const lisp_module = function () {
       }
     } else {
       // string.
-      if (isNaN(l) && l[0] !== "'" && l[0] !== '"' && l[0] !== ':') {
+      if (isNaN(l) && l && l[0] !== "'" && l[0] !== '"' && l[0] !== ':') {
         // not a number
         return (need_return_string ? 'return ' : '') + validateName(l);
       } else {
