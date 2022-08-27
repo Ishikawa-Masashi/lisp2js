@@ -10,6 +10,7 @@
     "build:debug": "node --inspect-brk=5858 ./node_modules/.bin/vite build",
     "publish": "npm publish --access public",
     "lint": "eslint --fix \"src/**/*.{js,ts}\"",
+    "typecheck": "tsc -p . --noEmit --emitDeclarationOnly false",
     "test": "yarn vitest"
   },
   "dependencies": {},

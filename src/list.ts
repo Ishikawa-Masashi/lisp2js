@@ -23,7 +23,7 @@ export class List {
   list to string
    */
   toString() {
-    function to_string(l?: List, output?: string): string {
+    function to_string(l: List | null, output: string): string {
       if (l === null) {
         return (output += ')');
       } else if (l instanceof List) {
@@ -69,7 +69,7 @@ export class List {
       x.slice(3, 5) => list(4, 5)
       x.slice(-2) => list(4, 5)
    */
-  slice(start, end) {
+  slice(start: number, end: number) {
     let length, neg, slice1, slice2;
     if (end === void 0) {
       end = null;
@@ -93,7 +93,7 @@ export class List {
         start = start < 0 ? length + start : start;
         end = end < 0 ? length + end : end;
       }
-      slice2 = function (l, i, j) {
+      slice2 = function (l: List, i: number, j: number): List | null {
         if (i === 0) {
           if (j === 0 || l === null) {
             return null;
@@ -156,9 +156,8 @@ export class List {
       x.toArray() => [1, 2, 3]
    */
   toArray() {
-    let output, to_array;
-    output = [];
-    to_array = function (l) {
+    const output: string[] = [];
+    const to_array = (l: List): string[] => {
       if (l === null) {
         return output;
       } else {
@@ -195,9 +194,8 @@ export class List {
       x = list(1, 2, 3)
       x.map(i=>i*2) => (2, 4, 6)
    */
-  map(func) {
-    let iter;
-    iter = function (l) {
+  map(func: any) {
+    const iter = (l: any): List | null => {
       if (l === null) {
         return null;
       } else {
@@ -212,9 +210,8 @@ export class List {
       x = list(1, 2, 3, 4)
       x.filter(i => i > 2)  => (3, 4)
    */
-  filter(func) {
-    let iter;
-    iter = function (l) {
+  filter(func: any) {
+    const iter = (l: List): List | null => {
       if (l === null) {
         return null;
       } else {
@@ -237,17 +234,34 @@ export class List {
       x = cons(3, 4)
       y = cons(3, cons(4, null))
    */
-export const cons = (a, b) => new List(a, b);
+export const cons = (a: any, b: any) => new List(a, b);
 
 /*
   car: get first element of list
    */
-export const car = (l) => l.first;
+export const car = (l: List) => l.first;
+export const first = (l: List) => l.first;
 
 /*
   cdr: get rest elements of list
    */
-export const cdr = (l) => l.rest;
+export const cdr = (l: List) => l.rest;
+export const rest = (l: List) => l.rest;
+
+/*
+  cadr
+ */
+export const second = (l: List) => first(rest(l));
+
+/*
+  caddr
+ */
+export const third = (l: List) => first(rest(rest(l)));
+
+/*
+  cadddr
+ */
+export const fourth = (l: List) => first(rest(rest(rest(l))));
 
 /*
   construct list. same as lisp
@@ -268,13 +282,12 @@ export const cdr = (l) => l.rest;
 // }
 
 export function list(...args: unknown[]) {
-  const a = 1 <= args.length ? Array.from(args) : [];
-  const create_list = (a: unknown[], i: number): List | null => {
-    if (i === a.length) {
+  const create_list = (args: unknown[], start: number): List | null => {
+    if (start === args.length) {
       return null;
     } else {
-      return cons(a[i], create_list(a, i + 1));
+      return cons(args[start], create_list(args, start + 1));
     }
   };
-  return create_list(a, 0);
+  return create_list(args, 0);
 }

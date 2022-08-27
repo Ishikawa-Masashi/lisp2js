@@ -5,7 +5,7 @@ import { List, cons, car, cdr, list } from './list';
  *
  */
 let node_environment = false;
-let vm = null;
+let vm: any = null;
 if (typeof module != 'undefined') {
   // nodejs
   vm = require('vm');
@@ -30,7 +30,7 @@ let $List = List;
  * ########################################
  * ########################################
  */
-const macros = {}; // used to save macro
+const macros: Record<string, any> = {}; // used to save macro
 let eval_result = '';
 let global_context = null;
 let recursion_function_name_count = 0;
@@ -423,7 +423,7 @@ const validateName = function (var_name) {
   return o;
 };
 
-function quasiquote_list(l) {
+function quasiquote_list(l: List): List | null {
   if (l === null) {
     return null;
   }
@@ -505,9 +505,9 @@ const macro_match = function (a, b, result) {
     }
   }
 };
-const macro_expand = function (clauses, exp) {
+const macro_expand = function (clauses: any, exp: any) {
   exp = exp.toArray();
-  const formatList = function (l) {
+  const formatList = (l: any): List => {
     // add "" to values.
     if (l === null) {
       return null;
@@ -701,7 +701,7 @@ const formatParams = function (params) {
  *   then p is "a-b-c"  "a-b-c"
  *
  */
-const formatKey = function (p) {
+const formatKey = (p: string) => {
   if (validateName(p) === p && isNaN(p)) {
     return p;
   } else {
@@ -907,7 +907,7 @@ const compiler = function (
                 */
 
       const default_and_keyword_params = []; // [(x, 12), (y, 13), {}]
-      const keyword_params = {}; // used to save default params and its value.
+      const keyword_params: Record<string, any> = {}; // used to save default params and its value.
       let parameter_num = 0;
       let __lisp_rest_list__ = false; // check whether rest parameter is in list ds
       let __lisp_rest__ = null; // save rest parameter.
@@ -1799,9 +1799,9 @@ const compiler = function (
 const lisp_compiler = function (
   l,
   need_return,
-  eval_$,
-  is_recur,
-  print_eval_result$
+  eval_$?,
+  is_recur?,
+  print_eval_result$?
 ) {
   let o = '';
   let result;
