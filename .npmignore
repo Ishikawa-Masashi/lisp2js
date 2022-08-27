@@ -1,0 +1,14 @@
+.vscode
+
+/node_modules
+/src
+/tests
+
+.gitignore
+.npnignore
+package-lock.json
+
+README.md
+tsconfig.json
+vite.config.ts
+yarn.lock
